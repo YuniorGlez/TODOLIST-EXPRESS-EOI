@@ -1,0 +1,16 @@
+[
+
+{
+    "id": 'y271yj',
+    "text": 'Soy un todo precioso',
+    "createdAt": Date.now(),
+    "isCompleted": true
+},
+{
+    "id": 'phx2pr',
+    "text": 'Soy un todo precioso 3 ',
+    "createdAt": (Date.now() - 100),
+    "isCompleted": false
+
+}
+]

@@ -15,30 +15,59 @@
                 <input id="newTODO" type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Username">
                 <button class="btn-primary" onclick="addNewTODO()">Añadir</button>
             </div>
-            <li class="list-group-item">Cras justo odio</li>
+            <div id="resultados">
+                <li class="list-group-item">Cras justo odio</li>
+            </div>
         </ul>
     </div>
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
+
+    let todos = []; 
+    cargarTODOS();
+
+
     function addNewTODO(){
             const newTodoTitle = $('#newTODO').val();
             const TODO = {
                 text: newTodoTitle
             };
-            
-            // Acto de fe, le voy a hacer un post a mi maravillosa api
-
-            $.post('http://localhost:5000/todos', TODO) 
+            $.ajax(
+                {
+                    type : 'POST',
+                    url : 'http://localhost:5000/api/todos',
+                    data : JSON.stringify(TODO),
+                    contentType : 'application/json',
+                    dataType : 'json'
+                }
+            )
                 .then( response => {
-                    console.log('Todo ha ido bien ', response);
+                    console.log('Esto es lo que quiero mostrar', response);
+                    todos.push(response);
+                    pintarEnPantalla();
                 })
                 .catch( err => {
-                    console.error('Todo ha salido fataaaaal', err);
+                    console.log(err.text);
                 })
     }
 
+    function cargarTODOS(){
+        $.get('http://localhost:5000/api/todos')
+            .then(todosServer => {
+                todos = todosServer;
+                pintarEnPantalla();
+            })
+
+    }
+
+    function pintarEnPantalla(){
+        $('#resultados').html('');
+        todos.forEach( todo => {
+            $('#resultados').append(`<li class="list-group-item">${todo.text}</li>`);
+        })
+    }
 
 
 
