@@ -1,16 +1,1 @@
-[
-
-{
-    "id": 'y271yj',
-    "text": 'Soy un todo precioso',
-    "createdAt": Date.now(),
-    "isCompleted": true
-},
-{
-    "id": 'phx2pr',
-    "text": 'Soy un todo precioso 3 ',
-    "createdAt": (Date.now() - 100),
-    "isCompleted": false
-
-}
-]
+[{"id":"y271yj","text":"Soy un todo precioso","createdAt":1521712886161,"isCompleted":false},{"id":"phx2pr","text":"Soy un todo precioso 3 ","createdAt":1521712886061,"isCompleted":false},{"text":"you are a good person","createdAt":1521713274870,"id":"1akj8u","isCompleted":false}]
