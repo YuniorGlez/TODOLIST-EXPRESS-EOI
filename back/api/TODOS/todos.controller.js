@@ -1,6 +1,6 @@
 const fs = require('fs');
-const { yesNiggasAsync, yesNiggasSync, getID} = require('./../../utils/functions')
-const todos = cargarTODOs();
+const { yesNiggasAsync, yesNiggasSync, getID } = require('./../../utils/functions')
+const TODOModel = require('./todos.model');
 
 module.exports = {
     getAllTODOs: getAllTODOs,
@@ -11,65 +11,85 @@ module.exports = {
 }
 
 function getAllTODOs(req, res) {
-    const results = todos;
-    console.log('YO SOY EL ULTIMO');
-    if (req.query.order === 'asc') {
-        results = results.sort();
-    }
-    if (req.query.order === 'desc') {
-        results = results.sort(-1);
-    }
-    res.json(results);
-}
+    TODOModel.find()
+        .then(response => {
+            console.log(response);
+            res.json(response);
+        })
+        .catch(err => {
+            res.json(err);
+        })
 
+}
 function getTODOById(req, res) {
-    const id = req.params.id;
-    const result = todos.find(todo => todo.id == id);
-    res.json(result);
+    TODOModel.findById(req.params.id)
+        .then(response => {
+            res.json(response);
+        })
+        .catch(err => {
+            res.json(err);
+        })
 }
 
 function deleteTODOById(req, res) {
-    const id = req.params.id;
-    todos = todos.filter(filtro => filtro.id != id);
-    res.json(result);
-    actualizarFichero();
+    TODOModel.findById(req.params.id)
+        .remove()
+        .then(response => {
+            res.json(response);
+        })
+        .catch(err => {
+            res.json(err);
+        })
 }
 
 function createTODO(req, res) {
-    yesNiggasAsync(req.body)
-        .then(hasNigga => {
-            if (hasNigga) {
-                return res.status(400).send('Oye, que no me mola que pongas nigga en el texto');
-            }
-            const newTODO = {
-                text: req.body.text,
-                createdAt: Date.now(),
-                id: getID(),
-                isCompleted: false
-            }
-            todos.push(newTODO);
-            res.json(newTODO);
-            actualizarFichero();
+    TODOModel.create(req.body)
+        .then(doc => {
+            res.json(doc);
         })
+        .catch(err => {
+            res.json(err);
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+    // yesNiggasAsync(req.body)
+    //     .then(hasNigga => {
+    //         if (hasNigga) {
+    //             return res.status(400).send('Oye, que no me mola que pongas nigga en el texto');
+    //         }
+    //         const newTODO = {
+    //             text: req.body.text,
+    //             createdAt: Date.now(),
+    //             id: getID(),
+    //             isCompleted: false
+    //         }
+    //         todos.push(newTODO);
+    //         res.json(newTODO);
+    //         actualizarFichero();
+    //     })
 }
 function updateTODO(req, res) {
-    const id = req.params.id;
-    const todo = todos.find(todo => todo.id === id);
-    if (req.body.text && !yesNiggasSync(req.body.text.length)) {
-        todo.text = req.body.text;
-    }
-    if (typeof req.body.isCompleted != undefined) {
-        todo.isCompleted = req.body.isCompleted;
-    }
-    res.send('Updated');
-    actualizarFichero();
-}
+    TODOModel.findOneAndUpdate({ _id: req.params.id }, req.body, {
+        new : true,
+        runValidators : true,
 
-function cargarTODOs(){
-    return JSON.parse(fs.readFileSync(__dirname + '/../../data/todos.json'))
-}
+    })
+        .then((udpdateD) => {
+            res.json(udpdateD);
+        })
+        .catch(err => {
+            res.json(err);
+        })
 
-function actualizarFichero(){
-    fs.writeFile(__dirname + '/../../data/todos.json', JSON.stringify(todos));
-    
+
 }
