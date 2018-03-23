@@ -10,7 +10,7 @@ var TODOschema = mongoose.Schema({
             validator: yesNiggasSync,
             message : 'Oye, no permito TODOs que contengan la palabra nigga'
         },
-        unique : [true , 'Ya existe un todo con el mismo texto']
+        unique : true 
     },
     createdAt: Number,
     isCompleted: Boolean

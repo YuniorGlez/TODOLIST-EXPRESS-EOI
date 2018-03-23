@@ -3,9 +3,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 let config = require('./.env');
-config = config[process.env.NODE_ENV];
-if (!config) return console.error(`El environment ${process.env.NODE_ENV} no está definido en el fichero .env.js`);
+const environment = process.env.NODE_ENV;
+config = config[environment];
+if (!config)
+    return console.error(`Invalid ${environment} environment`);
 
+    
 // Conectamos mongoose con nuestra db
 const mongoose = require('mongoose');
 mongoose.connect(config.mongoDBURI + config.mongoDBDataBaseName);
