@@ -1,15 +1,21 @@
 const mongoose = require('mongoose');
+const { yesNiggasSync } = require('./../../utils/functions');
 
 var TODOschema = mongoose.Schema({
     text: {
-        type : String,
-        required : [true , 'Tiiiio tienes que poner un texto'],
-        minlength : [10 , 'Minimo ponme 10 caracteres ijupue..']
+        type: String,
+        required: [true, 'El atributo text es requerido.'],
+        minlength: [10, 'Haz de introducir mínimo 10 caracteres.'],
+        validation: {
+            validator: yesNiggasSync,
+            message : 'Oye, no permito TODOs que contengan la palabra nigga'
+        },
+        unique : [true , 'Ya existe un todo con el mismo texto']
     },
     createdAt: Number,
     isCompleted: Boolean
-} ,
-    { versionKey : false}
+},
+    { versionKey: false }
 );
 
 var TODO = mongoose.model('todo', TODOschema);
